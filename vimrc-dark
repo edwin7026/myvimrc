@@ -42,6 +42,15 @@ set nu
 set hlsearch
 let g:mapleader=" "
 
+" something for all files
+au BufNewFile,BufRead *
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
 if has("gui_running")
 	set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 11
 endif
@@ -90,15 +99,6 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.d match BadWhitespace /\s\+$/
 " python stuffs
 let g:ycm_python_binary_path = 'python'
 let g:ycm_semantic_triggers = { 'python': ['re!(import\s+|from\s+(\w+\s+(import\s+(\w+,\s+)*)?)?)'] }
-
-" something for all files
-au BufNewFile,BufRead *
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix
 
 " make python look pretty
 let python_highlight_all=1
