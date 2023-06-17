@@ -1,0 +1,161 @@
+set nocompatible " be iMproved, required
+filetype off " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Syntastic'
+Plugin 'https://github.com/tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree'
+Plugin 'bling/vim-airline'
+Plugin 'https://github.com/joshdick/onedark.vim'
+Plugin 'frazrepo/vim-rainbow'
+Plugin 'vim-scripts/indentpython.vim'
+Bundle 'ervandew/supertab'
+Plugin 'https://github.com/ycm-core/YouCompleteMe.git'
+Plugin 'nvie/vim-flake8'
+Plugin 'kien/ctrlp.vim'
+Plugin 'https://github.com/idanarye/vim-dutyl'
+Plugin 'Sirsireesh/vim-dlang-phobos-highlighter'
+Plugin 'https://github.com/SirVer/ultisnips/'
+Plugin 'honza/vim-snippets'
+Plugin 'https://github.com/junegunn/fzf'
+Plugin 'https://github.com/preservim/tagbar'
+Plugin 'https://github.com/lambdalisue/vim-pyenv.git'
+Plugin 'https://github.com/vim-python/python-syntax.git'
+Plugin 'mtikekar/vim-bsv'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" Basic configss
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+set nu
+set hlsearch
+let g:mapleader=" "
+
+if has("gui_running")
+	set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 11
+endif
+
+
+"ultisnips stuffs
+
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+" Syntastic Configs
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
+" rainbow bracket stuffs
+let g:rainbow_active = 1
+
+" One dark stuffs
+syntax on
+colorscheme onedark
+
+" airline stuffs
+let g:airline_powerline_fonts = 1
+
+" Don't show seperators
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+let g:airline_symbols = #{branch: '⎇'}
+
+" remove unnecessary white spaces
+highlight BadWhitespace ctermbg=red guibg=darkred
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.d match BadWhitespace /\s\+$/
+
+" python stuffs
+let g:ycm_python_binary_path = 'python'
+let g:ycm_semantic_triggers = { 'python': ['re!(import\s+|from\s+(\w+\s+(import\s+(\w+,\s+)*)?)?)'] }
+
+" something for all files
+au BufNewFile,BufRead *
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" make python look pretty
+let python_highlight_all=1
+syntax on
+
+" goto definition
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" ignore .pyc in NERDTree
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+nmap <F2> : NERDTreeToggle<CR>
+
+" dlang stuffs
+let g:dutyl_stdImportPaths=['/home/edwin/dlang/dmd-2.103.1/src/phobos/std/', '/home/edwin/tutorial/euvm/tools/euvm_bin/import/esdl/', '/home/edwin/tutorial/euvm/tools/euvm_bin/import/uvm/' ]
+let g:dutyl_neverAddClosingParen=1
+call dutyl#register#tool('dcd-client', 'dcd-client')
+call dutyl#register#tool('dcd-server', 'dcd-server')
+call dutyl#register#tool('dfmt', '/home/edwin/.dub/packages/dfmt-0.15.0/dfmt/bin/dfmt')
+call dutyl#register#tool('dscanner', 'dscanner')
+
+" vim-dlang-phobos stuffs
+let g:d_class_scope_highlight = 1
+
+" tagbar stuffs
+nmap <F1> : TagbarToggle<CR>
+
+let g:tagbar_type_d = {
+            \ 'ctagstype' : 'd',
+            \ 'kinds'     : [
+            \ 'c:classes:1:1',
+            \ 'f:functions:1:1',
+            \ 'T:template:1:1',
+            \ 'g:enums:1:1',
+            \ 'e:enumerators:0:0',
+            \ 'u:unions:1:1',
+            \ 's:structs:1:1',
+            \ 'v:variables:1:0',
+            \ 'i:interfaces:1:1',
+            \ 'm:members',
+            \ 'a:alias'
+            \ ],
+            \'sro': '.',
+            \ 'kind2scope' : {
+            \ 'c' : 'class',
+            \ 'g' : 'enum',
+            \ 's' : 'struct',
+            \ 'u' : 'union',
+            \ 'T' : 'template'
+            \},
+            \ 'scope2kind' : {
+            \ 'enum'      : 'g',
+            \ 'class'     : 'c',
+            \ 'struct'    : 's',
+            \ 'union'     : 'u',
+            \ 'template'  : 'T'
+            \ },
+            \ 'ctagsbin' : 'dscanner',
+            \ 'ctagsargs' : ['--ctags']
+            \ }
